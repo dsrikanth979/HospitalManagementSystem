@@ -1,0 +1,86 @@
+﻿@model HospitalManagementSystem.Models.Billing
+
+@{
+    ViewData["Title"] = "Invoice";
+}
+
+<div class="container mt-4">
+
+    <div class="card shadow p-4">
+
+        <h2 class="text-center text-primary">
+            🏥 Hospital Management System
+        </h2>
+
+        <hr />
+
+        <h4 class="text-center">Patient Billing Invoice</h4>
+
+        <br />
+
+        <table class="table table-bordered">
+
+            <tr>
+                <th>Bill ID</th>
+                <td>@Model.BillId</td>
+            </tr>
+
+            <tr>
+                <th>Bill Date</th>
+                <td>@Model.BillDate.ToShortDateString()</td>
+            </tr>
+
+            <tr>
+                <th>Patient</th>
+                <td>@Model.Appointment?.Patient?.FullName</td>
+            </tr>
+
+            <tr>
+                <th>Doctor</th>
+                <td>@Model.Appointment?.Doctor?.DoctorName</td>
+            </tr>
+
+            <tr>
+                <th>Consultation Fee</th>
+                <td>₹ @Model.ConsultationFee</td>
+            </tr>
+
+            <tr>
+                <th>Lab Fee</th>
+                <td>₹ @Model.LabFee</td>
+            </tr>
+
+            <tr>
+                <th>Medicine Fee</th>
+                <td>₹ @Model.MedicineFee</td>
+            </tr>
+
+            <tr>
+                <th>Other Charges</th>
+                <td>₹ @Model.OtherCharges</td>
+            </tr>
+
+            <tr class="table-success">
+                <th>Total Amount</th>
+                <td><strong>₹ @Model.TotalAmount</strong></td>
+            </tr>
+
+        </table>
+
+        <div class="text-center mt-4">
+
+            <button onclick="window.print()"
+                    class="btn btn-primary">
+                🖨 Print Invoice
+            </button>
+
+            <a asp-action="Index"
+               class="btn btn-secondary">
+                Back
+            </a>
+
+        </div>
+
+    </div>
+
+</div>

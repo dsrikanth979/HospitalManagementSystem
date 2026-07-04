@@ -1,0 +1,125 @@
+@model HospitalManagementSystem.Models.Billing
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Billing</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            
+            <div class="form-group">
+                <label asp-for="AppointmentId"></label>
+                <select asp-for="AppointmentId"
+                        asp-items="ViewBag.AppointmentId"
+                        class="form-control">
+                    <option value="">-- Select Appointment --</option>
+                </select>
+            </div>
+            <div class="form-group mt-2">
+                <label>Patient Name</label>
+                <input type="text" id="PatientName" class="form-control" readonly />
+            </div>
+
+            <div class="form-group mt-2">
+                <label>Doctor Name</label>
+                <input type="text" id="DoctorName" class="form-control" readonly />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ConsultationFee" class="control-label"></label>
+                <input asp-for="ConsultationFee"
+                       id="ConsultationFee"
+                       class="form-control"
+                       readonly />
+                <span asp-validation-for="ConsultationFee" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="LabFee" class="control-label"></label>
+                <input asp-for="LabFee" class="form-control" />
+                <span asp-validation-for="LabFee" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="MedicineFee" class="control-label"></label>
+                <input asp-for="MedicineFee" class="form-control" />
+                <span asp-validation-for="MedicineFee" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="OtherCharges" class="control-label"></label>
+                <input asp-for="OtherCharges" class="form-control" />
+                <span asp-validation-for="OtherCharges" class="text-danger"></span>
+            </div>
+            <div class="form-group mt-2">
+                <label>Total Amount</label>
+                <input id="TotalAmount"
+                       class="form-control"
+                       readonly />
+            </div>
+
+            
+
+           
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+@section Scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        $(document).ready(function () {
+
+            $("#AppointmentId").change(function () {
+
+                var id = $(this).val();
+
+                if (id == "")
+                    return;
+
+                $.get("/Billings/GetAppointmentDetails?id=" + id, function (data) {
+
+                    $("#PatientName").val(data.patient);
+                    $("#DoctorName").val(data.doctor);
+                    $("#ConsultationFee").val(data.consultationFee);
+
+                    calculateTotal();
+                });
+            });
+
+            $("#LabFee,#MedicineFee,#OtherCharges").on("keyup change", function () {
+                calculateTotal();
+            });
+
+            function calculateTotal() {
+
+                var consultation = parseFloat($("#ConsultationFee").val()) || 0;
+                var lab = parseFloat($("#LabFee").val()) || 0;
+                var medicine = parseFloat($("#MedicineFee").val()) || 0;
+                var other = parseFloat($("#OtherCharges").val()) || 0;
+
+                var total = consultation + lab + medicine + other;
+
+                $("#TotalAmount").val(total.toFixed(2));
+            }
+
+        });
+    </script>
+}

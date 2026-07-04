@@ -1,0 +1,123 @@
+@model IEnumerable<HospitalManagementSystem.Models.Doctor>
+
+@{
+    ViewData["Title"] = "Doctors";
+}
+
+<div class="card shadow">
+
+    <div class="card-header bg-success text-white">
+
+        <div class="row align-items-center">
+
+            <div class="col-md-4">
+                <h4 class="mb-0">
+                    <i class="fa-solid fa-user-doctor"></i> Doctors
+                </h4>
+            </div>
+
+            <div class="col-md-4">
+                <input type="text"
+                       id="searchDoctor"
+                       class="form-control"
+                       placeholder="🔍 Search Doctor..." />
+            </div>
+
+            <div class="col-md-4 text-end">
+                <a asp-action="Create" class="btn btn-light">
+                    <i class="fa-solid fa-user-plus"></i> Add Doctor
+                </a>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="card-body">
+
+        <table class="table table-striped table-hover table-bordered align-middle"
+               id="doctorTable">
+
+            <thead class="table-dark">
+                <tr>
+                    <th>Doctor Name</th>
+                    <th>Specialization</th>
+                    <th>Qualification</th>
+                    <th>Experience</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>Fee</th>
+                    <th width="220">Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+
+                        <td>@item.DoctorName</td>
+                        <td>@item.Specialization</td>
+                        <td>@item.Qualification</td>
+                        <td>@item.Experience</td>
+                        <td>@item.Phone</td>
+                        <td>@item.Email</td>
+                        <td>₹ @item.ConsultationFee</td>
+
+                        <td>
+
+                            <a asp-action="Edit"
+                               asp-route-id="@item.DoctorId"
+                               class="btn btn-warning btn-sm">
+                                <i class="fa-solid fa-pen"></i>
+                            </a>
+
+                            <a asp-action="Details"
+                               asp-route-id="@item.DoctorId"
+                               class="btn btn-info btn-sm text-white">
+                                <i class="fa-solid fa-eye"></i>
+                            </a>
+
+                            <a asp-action="Delete"
+                               asp-route-id="@item.DoctorId"
+                               class="btn btn-danger btn-sm"
+                               onclick="return confirm('Are you sure you want to delete this doctor?');">
+                                <i class="fa-solid fa-trash"></i>
+                            </a>
+
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+@section Scripts
+{
+    <script>
+
+        document.getElementById("searchDoctor").addEventListener("keyup", function () {
+
+            var value = this.value.toLowerCase();
+
+            var rows = document.querySelectorAll("#doctorTable tbody tr");
+
+            rows.forEach(function (row) {
+
+                row.style.display = row.innerText.toLowerCase().includes(value)
+                    ? ""
+                    : "none";
+
+            });
+
+        });
+
+    </script>
+}
